@@ -8,7 +8,6 @@
 #include <sys/stat.h>
 
 #define NUMRES 5
-int matrix [NUMRES][2];
 int fd;
 char *data;
 off_t len;
@@ -19,18 +18,6 @@ int type, units;
 struct stat sb;
 
 int main(void){
-	//store resource data
-	FILE *res;
-	res = fopen("res.txt", "r");
-	if (res){
-		for (int i=0; i<NUMRES; i++){
-			for (int j=0;j<2;j++){
-				fscanf(res, "%d", &matrix[i][j]);
-			}
-		}
-	}
-
-    fclose(res);
 
 	//memory map
 	fd = open("res.txt", O_RDWR);
@@ -57,9 +44,8 @@ int main(void){
 				if (data[i]== type +'0'){
 					//in specific resource type 
 					//check if enough resources
-					printf("%c \n", (data[i+2]));
 					if (data[i+2] < units+ '0'){
-						printf("Not enough resources, only %d units left in resource type %d . \n", data[i], data[i+2]);
+						printf("Not enough resources, only %c units left in resource type %c . \n", data[i], data[i+2]);
 					break;
 					}
 					//enough units
@@ -67,7 +53,6 @@ int main(void){
 					else{
 						//subtract from mapped file
 						data[i+2] -= units;
-						printf("%d \n",data[i+2]);
 					}
 				}
 				
@@ -84,7 +69,7 @@ int main(void){
           perror("msync failed with error:");
           return -1;
       }
-      else (void) printf("%s","msync completed successfully.");
+      else {} ;
 
 
     close(fd);
